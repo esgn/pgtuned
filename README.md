@@ -56,7 +56,7 @@ In addition the following environment variables may be provided for tuning :
 * `TOTAL_MEM` : If not provided `pgtune.sh` will try to determine the total memory
 * `CPU_COUNT` : If not provided `pgtune.sh` will try to determine the cpu count
 * `MAX_CONN` : If not provided `200` for default DB_TYPE
-* `STGE_TYPE` : If not provided `pgtune.sh` will try to determine the cpu count
+* `STGE_TYPE` : If not provided `pgtune.sh` will try to determine the storage type
 
 Command line example for running the docker image :
 `docker run -e POSTGRES_PASSWORD=mysecretpassword -e TOTAL_MEM=8GB -e DB_TYPE=mixed -e CPU_COUNT=4 -e STGE_TYPE=ssd pgtuned`
