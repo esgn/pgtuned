@@ -64,4 +64,4 @@ Command line example for running the docker image :
 
 ### docker-compose
 
-A docker-compose file is provided to illustrate how to use the PGTUned image in the context of a docker-compose project.
+A docker-compose file is provided to illustrate how to use the PGTuned image in the context of a docker-compose project.
