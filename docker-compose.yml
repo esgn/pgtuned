@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  pgtuned:
+    build:
+      context: .
+      args:
+        # Example showing how to change tag of official PostgreSQL image used
+        - POSTGRES_VERSION=13
+    environment:
+      # PGTuned options
+      # - DB_TYPE=mixed
+      # - STGE_TYPE=ssd
+      # - TOTAL_MEM=8GB
+      # - CPU_COUNT=8
+      # - MAX_CONN=1000
+      # - PG_VERSION=14
+      # PostgreSQL official Docker image options
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=user
+      - POSTGRES_DB=pgtuned
+    container_name: pgtuned
+    ports:
+      - "5432:5432"
