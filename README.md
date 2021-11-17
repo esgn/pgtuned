@@ -48,7 +48,7 @@ In practice `pgtuned.sh` script replaces at container startup the default `postg
 
 ### Running pgtuned image
 
-`POSTGRES_PASSWORD` environment variable is required to use the PostgreSQL image. All other environment variables of the official PostgreSQL Docker image may also be used.
+`POSTGRES_PASSWORD` environment variable is required to use the official PostgreSQL image. All other environment variables of the official PostgreSQL Docker image may also be used.
 
 In addition the following environment variables may be provided for tuning :
 * `PG_VERSION` : Should not be necessary as Docker image `PG_MAJOR` environment variable will be used by default
