@@ -32,7 +32,8 @@ It produces a postgresql.conf based on supplied parameters.
                       default value: preset corresponding to db_type
   -s STGE_TYPE        (optional) Type of data storage device used with PostgreSQL
                       accepted values: hdd, sdd, san
-                      default value: script will try to determine the storage type (san not supported)
+                      default value: script will try to determine the storage type (san not supported) and use hdd
+                      value in case of failure.
 ```
 
 `test.sh` offers some basic testing of the script. 
