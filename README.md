@@ -41,11 +41,21 @@ It produces a postgresql.conf based on supplied parameters.
 ## Docker image
 
 The PGTuned image is built on top of the [official PostgreSQL Docker image](https://hub.docker.com/_/postgres). The default tag used is `14`.  
-In practice `pgtuned.sh` script replaces at container startup the default `postgresql.conf` by a new one created with `pgtune.sh` using supplied options.
+In practice, `pgtuned.sh` script replaces at container startup the default `postgresql.conf` by a new one created with `pgtune.sh` using supplied options.
 
 ### Building pgtuned image
 
+The default command build the image from `postgres:14` without PostGIS
+
 `docker build --no-cache . -t pgtuned`
+
+The following command build the image with `postgres:13` without PostGIS
+
+`docker build --no-cache --build-arg POSTGRES_VERSION=13 . -t pgtuned:13`
+
+The following command build the image with `postgres:12` with PostGIS 2.5
+
+`docker build --no-cache --build-arg POSTGRES_VERSION=12 --build-arg POSTGIS_VERSION=2.5 . -t pgtuned:12-2.5`
 
 ### Running pgtuned image
 

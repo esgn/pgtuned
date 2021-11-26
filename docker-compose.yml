@@ -7,6 +7,8 @@ services:
       args:
         # Example showing how to change tag of official PostgreSQL image used
         - POSTGRES_VERSION=13
+        # If PostGIS is required
+        # - POSTGIS_VERSION=3
     environment:
       # PGTuned options
       # - DB_TYPE=mixed
