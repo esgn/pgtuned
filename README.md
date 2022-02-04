@@ -49,15 +49,21 @@ In practice, at container startup `pgtuned.sh` script replaces the default `post
 
 The command below builds the `pgtuned` image using `postgres:14` image **without PostGIS**
 
-`docker build --no-cache . -t pgtuned`
+```
+docker build --no-cache . -t pgtuned
+```
 
 The following command builds the `pgtuned:13` image using `postgres:13` image **without PostGIS**
 
-`docker build --no-cache --build-arg POSTGRES_VERSION=13 . -t pgtuned:13`
+```
+docker build --no-cache --build-arg POSTGRES_VERSION=13 . -t pgtuned:13
+```
 
 The following command builds the `pgtuned:12-2.5` image using `postgres:12` image **with PostGIS 2.5**
 
-`docker build --no-cache --build-arg POSTGRES_VERSION=12 --build-arg POSTGIS_VERSION=2.5 . -t pgtuned:12-2.5`
+```
+docker build --no-cache --build-arg POSTGRES_VERSION=12 --build-arg POSTGIS_VERSION=2.5 . -t pgtuned:12-2.5
+```
 
 A compatibility matrix between PostgreSQL and PostGIS versions is available [here](https://trac.osgeo.org/postgis/wiki/UsersWikiPostgreSQLPostGIS)
 
@@ -75,10 +81,14 @@ In addition the following environment variables may be provided to tune PostgreS
 * *`PG_VERSION` : Should not be necessary as Docker image `PG_MAJOR` environment variable will be used by default*
 
 Default command line for running the `pgtuned` image with default `pgtune.sh` options :
-`docker run -e POSTGRES_PASSWORD=secret --name pgtuned pgtuned`
+```
+docker run -e POSTGRES_PASSWORD=secret --name pgtuned pgtuned
+```
 
-Command line example for running the `pgtuned` imaage with `2GB` of RAM, `mixed` database type, `4` cpu cores and `ssd` storage :
-`docker run -e POSTGRES_PASSWORD=secret -e TOTAL_MEM=2GB -e DB_TYPE=mixed -e CPU_COUNT=4 -e STGE_TYPE=ssd --name pgtuned pgtuned`
+Command line example for running the `pgtuned` image with `2GB` of RAM, `mixed` database type, `4` cpu cores and `ssd` storage :
+```
+docker run -e POSTGRES_PASSWORD=secret -e TOTAL_MEM=2GB -e DB_TYPE=mixed -e CPU_COUNT=4 -e STGE_TYPE=ssd --name pgtuned pgtuned
+```
 
 You can check PostgreSQL parameter (here `work_mem`) by using such a command once the `pgtuned` is up and running :
 ```
