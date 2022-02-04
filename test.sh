@@ -34,7 +34,7 @@ do
       if [ "$(cmp $test_files_dir$test_file $output_file)" ]
       then
         echo "Test result : error"
-        echo "REASON : generated file does not match existing file"
+        echo "REASON : generated file does not match existing file. Inspect $output_file."
         exit 1
       else
         echo "Test result : passed"

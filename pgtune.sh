@@ -9,7 +9,7 @@ cat << EOF
 Usage: ${0##*/} [-h] [-v PG_VERSION] [-t DB_TYPE] [-m TOTAL_MEM] [-u CPU_COUNT] [-c MAX_CONN] [-s STGE_TYPE]
 
 This script is a bash port of PGTune (https://pgtune.leopard.in.ua).
-It produces a postgresql.conf based on supplied parameters.
+It produces a postgresql.conf file based on supplied parameters.
 
   -h                  display this help and exit
   -v PG_VERSION       (optional) PostgreSQL version
@@ -20,17 +20,17 @@ It produces a postgresql.conf based on supplied parameters.
                       default value: web
   -m TOTAL_MEM        (optional) how much memory can PostgreSQL use
                       accepted values: integer with unit ("MB" or "GB") between 1 and 9999 and greater than 512MB
-                      default value: script will try to determine the total memory and exit in case of failure
+                      default value: this script will try to determine the total memory and exit in case of failure
   -u CPU_COUNT        (optional) number of CPUs, which PostgreSQL can use
                       accepted values: integer between 1 and 9999
                       CPUs = threads per core * cores per socket * sockets
-                      default value: script will try to determine the CPUs count and exit in case of failure
+                      default value: this script will try to determine the CPUs count and exit in case of failure
   -c MAX_CONN         (optional) Maximum number of PostgreSQL client connections
                       accepted values: integer between 20 and 9999
                       default value: preset corresponding to db_type
   -s STGE_TYPE        (optional) Type of data storage device used with PostgreSQL
                       accepted values: hdd, ssd, san
-                      default value: script will try to determine the storage type (san not supported) and use hdd
+                      default value: this script will try to determine the storage type (san not supported) and use hdd
                       value in case of failure.
 EOF
 }

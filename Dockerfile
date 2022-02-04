@@ -21,7 +21,7 @@ RUN if [ ! -z $POSTGIS_VERSION ]; \
  && rm -rf /var/lib/apt/lists/*; \
  fi
 
-# Run the rest of the commands as the ``postgres``
+# Run the rest of the commands as postgres user
 USER postgres:postgres
 
 # Scripts pgtuning
