@@ -33,6 +33,5 @@ jobs:
       with:
         context: .
         push: true
-        repository: esgn/pgtuned
         build_args: POSTGRES_VERSION=14,POSTGIS_VERSION=3
-        tags: 14-3, withpostgis-latest
+        tags: esgn/pgtuned:14-3, esgn/pgtuned:withpostgis-latest
