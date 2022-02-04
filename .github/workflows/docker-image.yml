@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --build-arg POSTGRES_VERSION=14 --build-arg POSTGIS_VERSION=3.2 --tag my-image-name:14-3.2 
+      run: docker build . --file Dockerfile --build-arg POSTGRES_VERSION=14 --build-arg POSTGIS_VERSION=3 --tag my-image-name:14-3 
