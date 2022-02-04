@@ -59,6 +59,8 @@ The following command builds the `pgtuned:12-2.5` image using `postgres:12` imag
 
 `docker build --no-cache --build-arg POSTGRES_VERSION=12 --build-arg POSTGIS_VERSION=2.5 . -t pgtuned:12-2.5`
 
+A compatibility matrix between PostgreSQL and PostGIS versions is available [here](https://trac.osgeo.org/postgis/wiki/UsersWikiPostgreSQLPostGIS)
+
 ### Running pgtuned image
 
 `POSTGRES_PASSWORD` environment variable is **compulsory** to use the official PostgreSQL image and therefore the `pgtuned` image.  
