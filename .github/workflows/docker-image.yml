@@ -28,15 +28,23 @@ jobs:
       with:
         images: esgn/pgtuned
       
-    - name: Build the Docker image
+    - name: Build docker image with latest postgis and postgresql
       uses: docker/build-push-action@v2.9.0
       with:
         context: .
         push: true
         build_args: POSTGRES_VERSION=14,POSTGIS_VERSION=3
-        tags: esgn/pgtuned:14-3, esgn/pgtuned:withpostgis-latest
+        tags: esgn/pgtuned:14-3, esgn/pgtuned:postgis-latest
+        
+    - name: Build docker image with latest postgresql but without postgis
+      uses: docker/build-push-action@v2.9.0
+      with:
+        context: .
+        push: true
+        build_args: POSTGRES_VERSION=14
+        tags: esgn/pgtuned:14, esgn/pgtuned:latest
 
-    - name: Build the Docker image
+    - name: Build docker image with postgis 2.5 and postgresql 12
       uses: docker/build-push-action@v2.9.0
       with:
         context: .
