@@ -93,7 +93,7 @@ Command line example for running the `pgtuned` image with `2GB` of RAM, `mixed` 
 docker run -e POSTGRES_PASSWORD=secret -e TOTAL_MEM=2GB -e DB_TYPE=mixed -e CPU_COUNT=4 -e STGE_TYPE=ssd --name pgtuned pgtuned
 ```
 
-You can check PostgreSQL parameter (here `work_mem`) by using such a command once the `pgtuned` is up and running :
+You can check PostgreSQL parameter (here `work_mem`) by using such a command once the `pgtuned` container is up and running :
 ```
 user@machine:$ docker exec -ti pgtuned psql -U postgres -W -c "show work_mem;"
 Password: 
