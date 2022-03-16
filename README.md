@@ -1,11 +1,12 @@
 # PGTuned
 
 PGTuned is a first attempt at building a Docker PostgreSQL image that includes basic performance tuning based on available ressources and contemplated use-case.  
-This project includes a bash script equivalent of [PGTune](https://github.com/le0pard/pgtune)
+This project includes a bash script equivalent of [PGTune](https://github.com/le0pard/pgtune).
 
 ## `pgtune.sh`
 
-This script is a bash port of [PGTune](https://github.com/le0pard/pgtune).
+This `pgtune.sh` script is a bash port of [PGTune](https://github.com/le0pard/pgtune).  
+In addition, this script will automatically determine missing parameters based on system settings.
 
 ```
 Usage: pgtune.sh [-h] [-v PG_VERSION] [-t DB_TYPE] [-m TOTAL_MEM] [-u CPU_COUNT] [-c MAX_CONN] [-s STGE_TYPE]
@@ -38,42 +39,44 @@ It produces a postgresql.conf file based on supplied parameters.
 
 ## `test.sh`
 
-The `test.sh` compares some `pgtune.sh` results with pre-generated `postgresql.conf` available in `test_files/`
+The `test.sh` compares some `pgtune.sh` results with pre-generated `postgresql.conf` available in `test_files/`.
 
 ## Building and running Docker image
 
 The PGTuned image is built on top of the [official PostgreSQL Docker image](https://hub.docker.com/_/postgres). The default tag used is `14`.  
-In practice, at container startup `pgtuned.sh` script replaces the default `postgresql.conf` file by a new one created with `pgtune.sh` using supplied options.
+At container startup `pgtuned.sh` script replaces the default `postgresql.conf` file by a new one created with `pgtune.sh` using supplied options.
 
-### Building pgtuned image
+### Building PGTuned image
 
-The command below builds the `pgtuned` image using `postgres:14` image **without PostGIS**
+Building the PGTuned docker image accepts two optional arguments `POSTGRES_VERSION` and `POSTGIS_VERSION`.
+
+The command below builds the `pgtuned` image using `postgres:14` image **without PostGIS** :
 
 ```
 docker build --no-cache . -t pgtuned
 ```
 
-The following command builds the `pgtuned:13` image using `postgres:13` image **without PostGIS**
+The following command builds the `pgtuned:13` image using `postgres:13` image **without PostGIS** :
 
 ```
 docker build --no-cache --build-arg POSTGRES_VERSION=13 . -t pgtuned:13
 ```
 
-The following command builds the `pgtuned:12-2.5` image using `postgres:12` image **with PostGIS 2.5**
+The following command builds the `pgtuned:12-2.5` image using `postgres:12` image **with PostGIS** `2.5` :
 
 ```
 docker build --no-cache --build-arg POSTGRES_VERSION=12 --build-arg POSTGIS_VERSION=2.5 . -t pgtuned:12-2.5
 ```
 
-A compatibility matrix between PostgreSQL and PostGIS versions is available [here](https://trac.osgeo.org/postgis/wiki/UsersWikiPostgreSQLPostGIS)
+➡️ A compatibility matrix between PostgreSQL and PostGIS versions is available [here](https://trac.osgeo.org/postgis/wiki/UsersWikiPostgreSQLPostGIS).
 
-### Running pgtuned image
+### Running PGTuned image
 
 `POSTGRES_PASSWORD` environment variable is **compulsory** to use the official PostgreSQL image and therefore the `pgtuned` image.  
-All other environment variables of the official PostgreSQL Docker image may also be used.
+All other environment variables of the official PostgreSQL Docker image may also be used (`POSTGRES_USER`, `POSTGRES_DB`, ...).
 
 In addition the following environment variables may be provided to tune PostgreSQL with `pgtune.sh` :
-* `DB_TYPE` : If not provided `web` will be used as default DB_TYPE
+* `DB_TYPE` : If not provided `web` will be used as default `DB_TYPE`
 * `TOTAL_MEM` : If not provided `pgtune.sh` will try to determine the total memory automatically
 * `CPU_COUNT` : If not provided `pgtune.sh` will try to determine the cpu count automatically
 * `MAX_CONN` : If not provided `200` wil be used as default maximum client connections number
@@ -100,6 +103,6 @@ Password:
 (1 row)
 ```
 
-### Using pgtuned with docker-compose
+### Using PGTuned with docker-compose
 
 A docker-compose file is provided to illustrate how to use the `pgtuned` image in the context of a docker-compose project.
