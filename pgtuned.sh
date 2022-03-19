@@ -43,11 +43,11 @@ cd /tmp
 echo "[pgtuned.sh] executing \"pgtune.sh$cmd_opts\""
 bash pgtune.sh $cmd_opts > tuned.conf
 
+echo "[pgtuned.sh] importing additional parameters from existing postgresql.conf"
 while IFS= read -r line; do
   if [[ $line =~ ^[[:blank:]]*([^\#]*)\ =\ ([^[[:blank:]]\#\'\"]*|\'.*\'|\".*\")[[:blank:]]*(\#?.*)$ ]]; then
     key=${BASH_REMATCH[1]}
     value=${BASH_REMATCH[2]}
-    # eolcomment=${BASH_REMATCH[3]}
     outoftune[$key]=$value
   fi
 done < /var/lib/postgresql/data/postgresql.conf
@@ -66,7 +66,7 @@ do
   if [ ! "${tuned[$key]}" ]; then
     if [ "$comment_line" -eq 0 ]; then
       echo >> tuned.conf 
-      echo "# CONFIGURATION VALUES HARVESTED FROM ORIGINAL POSTGRES DOCKER IMAGE" >> tuned.conf
+      echo "# Configuration parameters harvested from original docker postgres image postgresql.conf" >> tuned.conf
       echo >> tuned.conf
       comment_line=1
     fi
