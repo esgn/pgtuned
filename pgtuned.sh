@@ -45,19 +45,19 @@ bash pgtune.sh $cmd_opts > tuned.conf
 
 while IFS= read -r line; do
   if [[ $line =~ ^[[:blank:]]*([^\#]*)\ =\ ([^[[:blank:]]\#\'\"]*|\'.*\'|\".*\")[[:blank:]]*(\#?.*)$ ]]; then
-	  key=${BASH_REMATCH[1]}
-	  value=${BASH_REMATCH[2]}
-	  # eolcomment=${BASH_REMATCH[3]}
-	  outoftune[$key]=$value
-	fi
+    key=${BASH_REMATCH[1]}
+    value=${BASH_REMATCH[2]}
+    # eolcomment=${BASH_REMATCH[3]}
+    outoftune[$key]=$value
+  fi
 done < /var/lib/postgresql/data/postgresql.conf
 
 while IFS= read -r line; do
-	if [[ $line =~ ^([^\#]*)\ =\ (.*)$ ]]; then
-	  key=${BASH_REMATCH[1]}
-	  value=${BASH_REMATCH[2]}
-	  tuned[$key]=$value
-	fi
+  if [[ $line =~ ^([^\#]*)\ =\ (.*)$ ]]; then
+    key=${BASH_REMATCH[1]}
+    value=${BASH_REMATCH[2]}
+    tuned[$key]=$value
+  fi
 done < tuned.conf
 
 comment_line=0
@@ -69,8 +69,8 @@ do
       echo "# CONFIGURATION VALUES HARVESTED FROM ORIGINAL POSTGRES DOCKER IMAGE" >> tuned.conf
       echo >> tuned.conf
       comment_line=1
-	  fi
-	echo $key" = "${outoftune[$key]} >> tuned.conf
+    fi
+    echo $key" = "${outoftune[$key]} >> tuned.conf
   fi
 done
 
