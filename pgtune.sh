@@ -568,5 +568,6 @@ if [ ! -z ${checkpoint_segments+x}]
 then
   echo "checkpoint_segments = "$checkpoint_segments
 fi
+echo
 
 unset set_parallel_settings
