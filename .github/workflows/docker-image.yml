@@ -33,7 +33,7 @@ jobs:
       with:
         context: .
         push: true
-        build_args: POSTGRES_VERSION=14,POSTGIS_VERSION=3
+        build-args: POSTGRES_VERSION=14,POSTGIS_VERSION=3
         tags: esgn/pgtuned:14-3, esgn/pgtuned:postgis-latest
         
     - name: Build docker image with latest postgresql but without postgis
@@ -41,7 +41,7 @@ jobs:
       with:
         context: .
         push: true
-        build_args: POSTGRES_VERSION=14
+        build-args: POSTGRES_VERSION=14
         tags: esgn/pgtuned:14, esgn/pgtuned:latest
 
     - name: Build docker image with postgis 2.5 and postgresql 12
@@ -49,5 +49,5 @@ jobs:
       with:
         context: .
         push: true
-        build_args: POSTGRES_VERSION=12,POSTGIS_VERSION=2.5
+        build-args: POSTGRES_VERSION=12,POSTGIS_VERSION=2.5
         tags: esgn/pgtuned:12-2.5
