@@ -62,10 +62,10 @@ The following command builds the `pgtuned:13` image using `postgres:13` image **
 docker build --no-cache --build-arg POSTGRES_VERSION=13 . -t pgtuned:13
 ```
 
-The following command builds the `pgtuned:12-2.5` image using `postgres:12` image **with PostGIS** `2.5` :
+The following command builds the `pgtuned:11-2.5` image using `postgres:11` image **with PostGIS** `2.5` :
 
 ```
-docker build --no-cache --build-arg POSTGRES_VERSION=12 --build-arg POSTGIS_VERSION=2.5 . -t pgtuned:12-2.5
+docker build --no-cache --build-arg POSTGRES_VERSION=11 --build-arg POSTGIS_VERSION=2.5 . -t pgtuned:11-2.5
 ```
 
 ➡️ A compatibility matrix between PostgreSQL and PostGIS versions is available [here](https://trac.osgeo.org/postgis/wiki/UsersWikiPostgreSQLPostGIS).
