@@ -5,6 +5,8 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+    
+concurrency: docker-image-ci
 
 jobs:
 
