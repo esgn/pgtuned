@@ -76,6 +76,48 @@ docker build --no-cache --build-arg POSTGRES_VERSION=13 . -t pgtuned:13
 docker build --no-cache --build-arg POSTGRES_VERSION=11 --build-arg POSTGIS_VERSION=2.5 . -t pgtuned:11-2.5
 ```
 
+:point_right: The helper script `check-compatibility.sh` runs the main versions of the official Docker PostgreSQL image and checks available PostGIS versions for each.
+
+<details> 
+<summary>View ouput of <code>check-compatibility.sh</code></summary>
+<code>
+Examining postgres:14
+######################
+Available PostGIS versions : 3
+Running on Debian GNU/Linux 11 (bullseye)
+
+Examining postgres:13
+######################
+Available PostGIS versions : 3
+Running on Debian GNU/Linux 11 (bullseye)
+
+Examining postgres:12
+######################
+Available PostGIS versions : 3
+Running on Debian GNU/Linux 11 (bullseye)
+
+Examining postgres:11
+######################
+Available PostGIS versions : 2.5 3
+Running on Debian GNU/Linux 9 (stretch)
+
+Examining postgres:10
+######################
+Available PostGIS versions : 2.4 2.5 3
+Running on Debian GNU/Linux 9 (stretch)
+
+Examining postgres:9.6
+######################
+Available PostGIS versions : 2.3 2.4 2.5 3
+Running on Debian GNU/Linux 9 (stretch)
+
+Examining postgres:9.5
+######################
+Available PostGIS versions : 2.3 2.4 2.5 3
+Running on Debian GNU/Linux 9 (stretch)
+</code>
+</details>
+
 ### Running PGTuned image
 
 `POSTGRES_PASSWORD` environment variable is **compulsory** to run the official PostgreSQL image and therefore the PGTuned image.  
