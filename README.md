@@ -1,4 +1,4 @@
-# PGTuned
+# PGTuned ![ci-status](https://github.com/esgn/pgtuned/actions/workflows/docker-image.yml/badge.svg)
 
 PGTuned is a first attempt at building a Docker PostgreSQL image that includes basic performance tuning based on available ressources and contemplated use-case.  
 This project includes a bash script equivalent of [PGTune](https://github.com/le0pard/pgtune).
