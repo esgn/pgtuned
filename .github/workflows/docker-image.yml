@@ -55,6 +55,6 @@ jobs:
         context: .
         push: true
         build-args: |
-          POSTGRES_VERSION=1
+          POSTGRES_VERSION=12
           POSTGIS_VERSION=2.5
         tags: esgn/pgtuned:12-2.5
