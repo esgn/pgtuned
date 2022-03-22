@@ -1,12 +1,13 @@
 # PGTuned ![ci-status](https://github.com/esgn/pgtuned/actions/workflows/docker-image.yml/badge.svg) [![stability-alpha](https://img.shields.io/badge/stability-alpha-f4d03f.svg)](https://github.com/mkenney/software-guides/blob/master/STABILITY-BADGES.md#alpha)
 
 PGTuned is a first attempt at building a Docker PostgreSQL image that includes basic performance tuning based on available ressources and contemplated use-case.  
+
 This project includes a bash script equivalent of [PGTune](https://github.com/le0pard/pgtune).
 
 ## `pgtune.sh`
 
 This `pgtune.sh` script is a bash port of [PGTune](https://github.com/le0pard/pgtune).  
-In addition, this script will automatically determine missing parameters based on system settings.
+All arguments have been rendered optional. The script will either use default value or try and automatically determine the parameter value.
 
 ```
 Usage: pgtune.sh [-h] [-v PG_VERSION] [-t DB_TYPE] [-m TOTAL_MEM] [-u CPU_COUNT] [-c MAX_CONN] [-s STGE_TYPE]
@@ -39,43 +40,48 @@ It produces a postgresql.conf file based on supplied parameters.
 
 ## `test.sh`
 
-The `test.sh` compares some `pgtune.sh` results with pre-generated `postgresql.conf` available in `test_files/`.
+The `test.sh` compares a selected number of `pgtune.sh` results with pre-generated `postgresql.conf` available in `test_files/`.  
+<br />
 
-## Building and running Docker image
+## Building and running PGTuned Docker image
 
-The PGTuned image is built on top of the [official PostgreSQL Docker image](https://hub.docker.com/_/postgres). The default tag used is `14`.  
-At container startup `pgtuned.sh` script replaces the default `postgresql.conf` file by a new one created with `pgtune.sh` using supplied options.
+The PGTuned image is built on top of the [official PostgreSQL Docker image](https://hub.docker.com/_/postgres). The installation of [PostGIS](https://postgis.net/) is optional at building stage.  
+
+When running the PGTuned image as a container, the `pgtuned.sh` script replaces on startup the default `postgresql.conf` file by a new one created with `pgtune.sh` using supplied parameters.
 
 ### Building PGTuned image
 
-Building the PGTuned docker image accepts two optional arguments `POSTGRES_VERSION` and `POSTGIS_VERSION`.
+The build stage of the PGTuned image accepts **two optional build arguments** :
+* `POSTGRES_VERSION` corresponds to any tag available in the [official PostgreSQL Docker image](https://hub.docker.com/_/postgres) save the `alpine` tags (examples : 14, 13.6, 11.15-stretch, ...). If omitted the `14` tag will be used.
+* `POSTGIS_VERSION` corresponds to the version of [PostGIS](https://postgis.net/) that will be installed. The selected version of PostGIS must be available in the packages of the chosen PostgreSQL image. If omitted PostGIS will not be installed.  
+<br />
 
-The command below builds the `pgtuned` image using `postgres:14` image **without PostGIS** :
+Below are command line examples to build different version of the PGTuned image :
+
+* Build the `pgtuned` image using `postgres:14` image **without PostGIS** :
 
 ```
 docker build --no-cache . -t pgtuned
 ```
 
-The following command builds the `pgtuned:13` image using `postgres:13` image **without PostGIS** :
+* Build the `pgtuned:13` image using `postgres:13` image **without PostGIS** :
 
 ```
 docker build --no-cache --build-arg POSTGRES_VERSION=13 . -t pgtuned:13
 ```
 
-The following command builds the `pgtuned:11-2.5` image using `postgres:11` image **with PostGIS** `2.5` :
+* Build the `pgtuned:11-2.5` image using `postgres:11` image **with PostGIS** `2.5` :
 
 ```
 docker build --no-cache --build-arg POSTGRES_VERSION=11 --build-arg POSTGIS_VERSION=2.5 . -t pgtuned:11-2.5
 ```
 
-➡️ A compatibility matrix between PostgreSQL and PostGIS versions is available [here](https://trac.osgeo.org/postgis/wiki/UsersWikiPostgreSQLPostGIS).
-
 ### Running PGTuned image
 
-`POSTGRES_PASSWORD` environment variable is **compulsory** to use the official PostgreSQL image and therefore the `pgtuned` image.  
+`POSTGRES_PASSWORD` environment variable is **compulsory** to run the official PostgreSQL image and therefore the PGTuned image.  
 All other environment variables of the official PostgreSQL Docker image may also be used (`POSTGRES_USER`, `POSTGRES_DB`, ...).
 
-In addition the following environment variables may be provided to tune PostgreSQL with `pgtune.sh` :
+In addition, the following environment variables may be provided to tune PostgreSQL with `pgtune.sh` :
 * `DB_TYPE` : If not provided `web` will be used as default `DB_TYPE`
 * `TOTAL_MEM` : If not provided `pgtune.sh` will try to determine the total memory automatically
 * `CPU_COUNT` : If not provided `pgtune.sh` will try to determine the cpu count automatically
@@ -83,12 +89,12 @@ In addition the following environment variables may be provided to tune PostgreS
 * `STGE_TYPE` : If not provided `pgtune.sh` will try to determine the storage type automatically
 * *`PG_VERSION` : Should not be necessary as Docker image `PG_MAJOR` environment variable will be used by default*
 
-Default command line for running the `pgtuned` image with default `pgtune.sh` options :
+Default command line for running the PGTuned image with default `pgtune.sh` options :
 ```
 docker run -d -e POSTGRES_PASSWORD=secret --name pgtuned pgtuned
 ```
 
-Command line example for running the `pgtuned` image with `2GB` of RAM, `mixed` database type, `4` cpu cores and `ssd` storage :
+Command line example for running the PGTuned image with `2GB` of RAM, `mixed` database type, `4` cpu cores and `ssd` storage :
 ```
 docker run -d -e POSTGRES_PASSWORD=secret -e TOTAL_MEM=2GB -e DB_TYPE=mixed -e CPU_COUNT=4 -e STGE_TYPE=ssd --name pgtuned pgtuned
 ```
@@ -119,18 +125,18 @@ shared_buffers = 981933kB
 effective_cache_size = 2945799kB
 maintenance_work_mem = 245483kB
 checkpoint_completion_target = 0.9
-wal_buffers = 16MB
-default_statistics_target = 100
-random_page_cost = 4
-effective_io_concurrency = 2
-work_mem = 4909kB
-min_wal_size = 1GB
-max_wal_size = 4GB
-max_worker_processes = 2
-max_parallel_workers = 2
-max_parallel_maintenance_workers = 1
-max_parallel_workers_per_gather = 1
+... more lines displayed after this ...
 ```
+
+### Using PGTuned images directly from Docker hub
+
+This project builds a small number of versions of the PGTuned image and deploy them to [Docker Hub](https://hub.docker.com/r/esgn/pgtuned).
+* `latest` corresponds to PostgreSQL 14
+* `postgis-latest` corresponds to PostgreSQL 14 and PostGIS 3
+* `POSTGRES_VERSION` corresponds to a specific PostgreSQL image version
+* `POSTGRES_VERSION-POSTGIS_VERSION` corresponds to a specific PostgreSQL image version with a specific PostGIS version
+
+To use these images simply `docker pull esgn/pgtuned:tag-name` and run.
 
 ### Using PGTuned with docker-compose
 
