@@ -18,5 +18,5 @@ effective_io_concurrency = 200
 work_mem = 524kB
 min_wal_size = 1GB
 max_wal_size = 4GB
-max_parallel_workers_per_gather = 4
 max_worker_processes = 8
+max_parallel_workers_per_gather = 4
