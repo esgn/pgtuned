@@ -1,6 +1,6 @@
 # PGTuned ![ci-status](https://github.com/esgn/pgtuned/actions/workflows/docker-image.yml/badge.svg) [![stability-alpha](https://img.shields.io/badge/stability-alpha-f4d03f.svg)](https://github.com/mkenney/software-guides/blob/master/STABILITY-BADGES.md#alpha)
 
-PGTuned is a first attempt at building a Docker PostgreSQL image that includes basic performance tuning based on available ressources and contemplated use-case.  
+PGTuned is a first attempt at building Docker PostgreSQL/PostGIS images that include basic performance tuning based on available resources and contemplated use-case.  
 
 This project includes a bash script equivalent of [PGTune](https://github.com/le0pard/pgtune).
 
