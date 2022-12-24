@@ -9,11 +9,11 @@ tags=$(curl "https://registry.hub.docker.com/v2/repositories/esgn/pgtuned-testin
 for tag in $tags
 do
   image_name=$testing_image":"$tag
-  docker rmi $image_name
-  docker pull $image_name
+  docker rmi $image_name &> /dev/null
+  docker pull -q $image_name
   docker run -d -e POSTGRES_PASSWORD=secret --name pg-testing$tag $image_name
   docker exec -ti pg-testing$tag bash -c "until pg_isready -q; do sleep 5; done"
   docker exec -ti pg-testing$tag bash -c "cat /etc/apt/sources.list.d/pgdg.list"
   docker exec -ti pg-testing$tag bash -c "cat /var/lib/postgresql/data/postgresql.conf" > pg-testing$tag".txt"
-  docker stop pg-testing$tag && docker rm pg-testing$tag
+  docker stop pg-testing$tag &> /dev/null && docker rm pg-testing$tag &> /dev/null
 done
