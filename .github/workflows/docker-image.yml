@@ -6,81 +6,78 @@ on:
   pull_request:
     branches: [dev]
 
-env:
-  image_name: esgn/pgtuned-testing
-
 jobs:
   build:
     strategy:
       matrix:
         include:
           - postgres_version: 15
-            tags: $image_name:15, $image_name:latest
+            tags: esgn/pgtuned-testing:15, esgn/pgtuned-testing:latest
           - postgres_version: 15
             postgis_version: 3
-            tags: $image_name:15-3, $image_name:postgis-latest
+            tags: esgn/pgtuned-testing:15-3, esgn/pgtuned-testing:postgis-latest
           - postgres_version: 14
-            tags: $image_name:14
+            tags: esgn/pgtuned-testing:14
           - postgres_version: 14
             postgis_version: 3
-            tags: $image_name:14-3
+            tags: esgn/pgtuned-testing:14-3
           - postgres_version: 13
-            tags: $image_name:13
+            tags: esgn/pgtuned-testing:13
           - postgres_version: 13
             postgis_version: 3
-            tags: $image_name:13-3
+            tags: esgn/pgtuned-testing:13-3
           - postgres_version: 12
-            tags: $image_name:12
+            tags: esgn/pgtuned-testing:12
           - postgres_version: 12
             postgis_version: 3
-            tags: $image_name:12-3
+            tags: esgn/pgtuned-testing:12-3
           - postgres_version: 11-bullseye
-            tags: $image_name:11
+            tags: esgn/pgtuned-testing:11
           - postgres_version: 11-bullseye
             postgis_version: 3
-            tags: $image_name:11-3
+            tags: esgn/pgtuned-testing:11-3
           - postgres_version: 11
             postgis_version: 2.5
-            tags: $image_name:11-2.5
+            tags: esgn/pgtuned-testing:11-2.5
           - postgres_version: 10-bullseye
-            tags: $image_name:10
+            tags: esgn/pgtuned-testing:10
           - postgres_version: 10-bullseye
             postgis_version: 3
-            tags: $image_name:10-3
+            tags: esgn/pgtuned-testing:10-3
           - postgres_version: 10
             postgis_version: 2.5
-            tags: $image_name:10-2.5
+            tags: esgn/pgtuned-testing:10-2.5
           - postgres_version: 10
             postgis_version: 2.4
-            tags: $image_name:10-2.4
+            tags: esgn/pgtuned-testing:10-2.4
           - postgres_version: 9.6-bullseye
-            tags: $image_name:9.6
+            tags: esgn/pgtuned-testing:9.6
           - postgres_version: 9.6-bullseye
             postgis_version: 3
-            tags: $image_name:9.6-3
+            tags: esgn/pgtuned-testing:9.6-3
           - postgres_version: 9.6
             postgis_version: 2.5
-            tags: $image_name:9.6-2.5
+            tags: esgn/pgtuned-testing:9.6-2.5
           - postgres_version: 9.6
             postgis_version: 2.4
-            tags: $image_name:9.6-2.4
+            tags: esgn/pgtuned-testing:9.6-2.4
           - postgres_version: 9.6
             postgis_version: 2.3
-            tags: $image_name:9.6-2.3
+            tags: esgn/pgtuned-testing:9.6-2.3
           - postgres_version: 9.5
-            tags: $image_name:9.5
+            tags: esgn/pgtuned-testing:9.5
           - postgres_version: 9.5
             postgis_version: 3
-            tags: $image_name:9.5-3
+            tags: esgn/pgtuned-testing:9.5-3
           - postgres_version: 9.5
             postgis_version: 2.5
-            tags: $image_name:9.5-2.5
+            tags: esgn/pgtuned-testing:9.5-2.5
           - postgres_version: 9.5
             postgis_version: 2.4
-            tags: $image_name:9.5-24
+            tags: esgn/pgtuned-testing:9.5-24
           - postgres_version: 9.5
             postgis_version: 2.3
-            tags: $image_name:9.5-2.3
+            tags: esgn/pgtuned-testing:9.5-2.3
 
     runs-on: ubuntu-latest
 
