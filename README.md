@@ -17,8 +17,8 @@ It produces a postgresql.conf file based on supplied parameters.
 
   -h                  display this help and exit
   -v PG_VERSION       (optional) PostgreSQL version
-                      accepted values: 9.5, 9.6, 10, 11, 12, 13, 14
-                      default value: 14
+                      accepted values: 9.5, 9.6, 10, 11, 12, 13, 14, 15
+                      default value: 15
   -t DB_TYPE          (optional) For what type of application is PostgreSQL used
                       accepted values: web, oltp, dw, desktop, mixed
                       default value: web
@@ -58,7 +58,7 @@ The build stage of the PGTuned image accepts **two optional build arguments** :
 
 Below are command line examples to build different version of the PGTuned image :
 
-* Build the `pgtuned` image using `postgres:14` image **without PostGIS** :
+* Build the `pgtuned` image using `postgres:15` image **without PostGIS** :
 
 ```
 docker build --no-cache . -t pgtuned
@@ -76,12 +76,17 @@ docker build --no-cache --build-arg POSTGRES_VERSION=13 . -t pgtuned:13
 docker build --no-cache --build-arg POSTGRES_VERSION=11 --build-arg POSTGIS_VERSION=2.5 . -t pgtuned:11-2.5
 ```
 
-:point_right: The helper script `check-compatibility.sh` runs the main versions of the official Docker PostgreSQL image and checks available PostGIS versions for each. This could be used as a guide to select the correct version of PostGIS for each PostgreSQL image version.
+:point_right: The helper script `test/scripts/check-compatibility.sh` runs the main versions of the official Docker PostgreSQL image and checks available PostGIS versions for each. This could be used as a guide to select the correct version of PostGIS for each PostgreSQL image version. Note that a patch is applied for `postgres` images older than 12 still running on Debian Stretch.
 
 <details> 
 <summary>View ouput of <code>check-compatibility.sh</code></summary>
 <pre>
 <code>
+Examining postgres:15
+######################
+Available PostGIS versions : 3
+Running on Debian GNU/Linux 11 (bullseye)
+<br/>
 Examining postgres:14
 ######################
 Available PostGIS versions : 3
@@ -99,21 +104,25 @@ Running on Debian GNU/Linux 11 (bullseye)
 <br/>
 Examining postgres:11
 ######################
+applying apt-archive.postgres.org patch
 Available PostGIS versions : 2.5 3
 Running on Debian GNU/Linux 9 (stretch)
 <br/>
 Examining postgres:10
 ######################
+applying apt-archive.postgres.org patch
 Available PostGIS versions : 2.4 2.5 3
 Running on Debian GNU/Linux 9 (stretch)
 <br/>
 Examining postgres:9.6
 ######################
+applying apt-archive.postgres.org patch
 Available PostGIS versions : 2.3 2.4 2.5 3
 Running on Debian GNU/Linux 9 (stretch)
 <br/>
 Examining postgres:9.5
 ######################
+applying apt-archive.postgres.org patch
 Available PostGIS versions : 2.3 2.4 2.5 3
 Running on Debian GNU/Linux 9 (stretch)
 </code>
@@ -174,9 +183,9 @@ checkpoint_completion_target = 0.9
 
 ### Using PGTuned images directly from Docker hub
 
-This project builds a small number of versions of the PGTuned image and deploy them to [Docker Hub](https://hub.docker.com/r/esgn/pgtuned) using the following tags :
-* `latest` corresponds to PostgreSQL 14
-* `postgis-latest` corresponds to PostgreSQL 14 and PostGIS 3
+This project builds a number of versions of the PGTuned image and deploy them to [Docker Hub](https://hub.docker.com/r/esgn/pgtuned) using the following tags :
+* `latest` corresponds to PostgreSQL 15
+* `postgis-latest` corresponds to PostgreSQL 15 and PostGIS 3
 * `POSTGRES_VERSION` corresponds to a specific PostgreSQL image version (e.g. 12) without PostGIS
 * `POSTGRES_VERSION-POSTGIS_VERSION` corresponds to a specific PostgreSQL image version including a specific PostGIS version (e.g. 12-3)
 
