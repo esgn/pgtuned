@@ -6,8 +6,6 @@ on:
   pull_request:
     branches: [dev]
 
-concurrency: docker-image-ci-testing
-
 jobs:
   build:
     strategy:
@@ -53,7 +51,7 @@ jobs:
             postgis_version: 2.4
             tags: esgn/pgtuned-testing:10-2.4
           - postgres_version: 9.6-bullseye
-            postgis_version: esgn/pgtuned-testing:9.6
+            tags: esgn/pgtuned-testing:9.6
           - postgres_version: 9.6-bullseye
             postgis_version: 3
             tags: esgn/pgtuned-testing:9.6-3
