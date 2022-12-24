@@ -23,6 +23,7 @@ declare -a arr=("15|3"
                 )
 
 IFS='|'
+cd "../../"
 for i in "${arr[@]}"
 do
     read -ra ADDR <<< "$i"

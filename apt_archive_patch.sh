@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-echo $PG_TAG
-
 cd /etc/apt/sources.list.d
 
 mv pgdg.list pgdg.list.backup
