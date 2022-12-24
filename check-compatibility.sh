@@ -4,13 +4,28 @@
 # and gets the available PostGIS version for each of them.
 # Also ouputs the distribution used for each image. 
 
-pg_versions="14 13 12 11 10 9.6 9.5"
+pg_versions="15 14 13 12 11 10 9.6 9.5"
 
 for v in $pg_versions
 do
   echo "Examining postgres:$v"
   echo "######################"
   docker run -d -e POSTGRES_PASSWORD=secret --name pg$v postgres:$v >/dev/null 2>&1
+  # Use apt-archive.postgres.org for old Debian stretch images
+  if [ $(echo "$v < 12"| bc) -ne 0 ]
+  then
+    echo "applying apt-archive.postgres.org patch"
+    c="cd /etc/apt/sources.list.d/ && mv pgdg.list pgdg.list.backup"
+    docker exec -ti pg$v bash -c "$c"
+    c="apt-get -qq update && DEBCONF_NOWARNINGS='yes' apt-get install apt-transport-https -y > /dev/null"
+    docker exec -ti pg$v bash -c "$c"
+    c="cd /etc/apt/sources.list.d/ && mv pgdg.list.backup pgdg.list"
+    docker exec -ti pg$v bash -c "$c"
+    c="sed -i 's/http\:\/\/apt\.postgres/https\:\/\/apt-archive\.postgres/' /etc/apt/sources.list.d/pgdg.list"
+    docker exec -ti pg$v bash -c "$c"
+    c="apt-get -qq update"
+    docker exec -ti pg$v bash -c "$c"
+  fi
   c="apt update >/dev/null 2>&1 && apt-cache search $v-postgis | grep -Po '(?<=postgresql-$v-postgis-)([0-9\.]*)' | uniq | xargs "
   versions=$(docker exec -ti pg$v bash -c "$c")
   distrib=$(docker exec -ti pg$v bash -c 'cat /etc/os-release' | grep -Po '(?<=PRETTY_NAME=")(.*)(?=")')

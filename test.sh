@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 test_files_dir="test_files/"
-pg_versions="14 13 12 11 10 9.6 9.5"
+pg_versions="15 14 13 12 11 10 9.6 9.5"
 db_types="web oltp dw desktop mixed"
 total_mem=8GB
 cpu_count=8

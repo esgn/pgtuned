@@ -2,269 +2,103 @@ name: Build and push pgtuned images
 
 on:
   push:
-    branches: [ main ]
+    branches: [dev]
   pull_request:
-    branches: [ main ]
-    
-concurrency: docker-image-ci
+    branches: [dev]
+
+concurrency: docker-image-ci-testing
 
 jobs:
-
   build:
+    strategy:
+      matrix:
+        include:
+          - postgres_version: 15
+            tags: esgn/pgtuned-testing:15, esgn/pgtuned-testing:latest
+          - postgres_version: 15
+            postgis_version: 3
+            tags: esgn/pgtuned-testing:15-3, esgn/pgtuned-testing:postgis-latest
+          - postgres_version: 14
+            tags: esgn/pgtuned-testing:14
+          - postgres_version: 14
+            postgis_version: 3
+            tags: esgn/pgtuned-testing:14-3
+          - postgres_version: 13
+            tags: esgn/pgtuned-testing:13
+          - postgres_version: 13
+            postgis_version: 3
+            tags: esgn/pgtuned-testing:13-3
+          - postgres_version: 12
+            tags: esgn/pgtuned-testing:12
+          - postgres_version: 12
+            postgis_version: 3
+            tags: esgn/pgtuned-testing:12-3
+          - postgres_version: 11-bullseye
+            tags: esgn/pgtuned-testing:11
+          - postgres_version: 11-bullseye
+            postgis_version: 3
+            tags: esgn/pgtuned-testing:11-3
+          - postgres_version: 11
+            postgis_version: 2.5
+            tags: esgn/pgtuned-testing:11-2.5
+          - postgres_version: 10-bullseye
+            tags: esgn/pgtuned-testing:10
+          - postgres_version: 10-bullseye
+            postgis_version: 3
+            tags: esgn/pgtuned-testing:10-3
+          - postgres_version: 10
+            postgis_version: 2.5
+            tags: esgn/pgtuned-testing:10-2.5
+          - postgres_version: 10
+            postgis_version: 2.4
+            tags: esgn/pgtuned-testing:10-2.4
+          - postgres_version: 9.6-bullseye
+            postgis_version: esgn/pgtuned-testing:9.6
+          - postgres_version: 9.6-bullseye
+            postgis_version: 3
+            tags: esgn/pgtuned-testing:9.6-3
+          - postgres_version: 9.6
+            postgis_version: 2.5
+            tags: esgn/pgtuned-testing:9.6-2.5
+          - postgres_version: 9.6
+            postgis_version: 2.4
+            tags: esgn/pgtuned-testing:9.6-2.4
+          - postgres_version: 9.6
+            postgis_version: 2.3
+            tags: esgn/pgtuned-testing:9.6-2.3
+          - postgres_version: 9.5
+            tags: esgn/pgtuned-testing:9.5
+          - postgres_version: 9.5
+            postgis_version: 3
+            tags: esgn/pgtuned-testing:9.5-3
+          - postgres_version: 9.5
+            postgis_version: 2.5
+            tags: esgn/pgtuned-testing:9.5-2.5
+          - postgres_version: 9.5
+            postgis_version: 2.4
+            tags: esgn/pgtuned-testing:9.5-24
+          - postgres_version: 9.5
+            postgis_version: 2.3
+            tags: esgn/pgtuned-testing:9.5-2.3
 
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out the repo
-      uses: actions/checkout@v2
-    
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v1.12.0
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-        
-    - name: Extract metadata (tags, labels) for Docker
-      id: meta
-      uses: docker/metadata-action@v3.6.2
-      with:
-        images: esgn/pgtuned
-      
+      - name: Check out the repo
+        uses: actions/checkout@v2
 
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1.12.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Build docker image with latest postgresql and postgis
-      uses: docker/build-push-action@v2.9.0
-      with:
-        context: .
-        push: true
-        build-args: |
-          POSTGRES_VERSION=14
-          POSTGIS_VERSION=3
-        tags: esgn/pgtuned:14-3, esgn/pgtuned:postgis-latest
-        
-    - name: Build docker image with latest postgresql but without postgis
-      uses: docker/build-push-action@v2.9.0
-      with:
-        context: .
-        push: true
-        build-args: |
-          POSTGRES_VERSION=14
-        tags: esgn/pgtuned:14, esgn/pgtuned:latest
-
-
-
-    - name: Build docker image with postgresql 13 and postgis 3
-      uses: docker/build-push-action@v2.9.0
-      with:
-        context: .
-        push: true
-        build-args: |
-          POSTGRES_VERSION=13
-          POSTGIS_VERSION=3
-        tags: esgn/pgtuned:13-3
-        
-    - name: Build docker image with postgresql 13 but without postgis
-      uses: docker/build-push-action@v2.9.0
-      with:
-        context: .
-        push: true
-        build-args: |
-          POSTGRES_VERSION=13
-        tags: esgn/pgtuned:13
-
-
-
-    - name: Build docker image with postgresql 12 and postgis 3
-      uses: docker/build-push-action@v2.9.0
-      with:
-        context: .
-        push: true
-        build-args: |
-          POSTGRES_VERSION=12
-          POSTGIS_VERSION=3
-        tags: esgn/pgtuned:12-3
-        
-    - name: Build docker image with postgresql 12 but without postgis
-      uses: docker/build-push-action@v2.9.0
-      with:
-        context: .
-        push: true
-        build-args: |
-          POSTGRES_VERSION=12
-        tags: esgn/pgtuned:12    
-
-
-
-    - name: Build docker image with postgresql 11 and postgis 3
-      uses: docker/build-push-action@v2.9.0
-      with:
-        context: .
-        push: true
-        build-args: |
-          POSTGRES_VERSION=11
-          POSTGIS_VERSION=3
-        tags: esgn/pgtuned:11-3
-
-    - name: Build docker image with postgresql 11 and postgis 2.5
-      uses: docker/build-push-action@v2.9.0
-      with:
-        context: .
-        push: true
-        build-args: |
-          POSTGRES_VERSION=11
-          POSTGIS_VERSION=2.5
-        tags: esgn/pgtuned:11-2.5
-
-    - name: Build docker image with postgresql 11 but without postgis
-      uses: docker/build-push-action@v2.9.0
-      with:
-        context: .
-        push: true
-        build-args: |
-          POSTGRES_VERSION=11
-        tags: esgn/pgtuned:11    
-
-
-
-    - name: Build docker image with postgresql 10 and postgis 3
-      uses: docker/build-push-action@v2.9.0
-      with:
-        context: .
-        push: true
-        build-args: |
-          POSTGRES_VERSION=10
-          POSTGIS_VERSION=3
-        tags: esgn/pgtuned:10-3
-
-    - name: Build docker image with postgresql 10 and postgis 2.5
-      uses: docker/build-push-action@v2.9.0
-      with:
-        context: .
-        push: true
-        build-args: |
-          POSTGRES_VERSION=10
-          POSTGIS_VERSION=2.5
-        tags: esgn/pgtuned:10-2.5
-
-    - name: Build docker image with postgresql 10 and postgis 2.4
-      uses: docker/build-push-action@v2.9.0
-      with:
-        context: .
-        push: true
-        build-args: |
-          POSTGRES_VERSION=10
-          POSTGIS_VERSION=2.4
-        tags: esgn/pgtuned:10-2.4
-
-    - name: Build docker image with postgresql 10 but without postgis
-      uses: docker/build-push-action@v2.9.0
-      with:
-        context: .
-        push: true
-        build-args: |
-          POSTGRES_VERSION=10
-        tags: esgn/pgtuned:10
-
-
-
-    - name: Build docker image with postgresql 9.6 and postgis 3
-      uses: docker/build-push-action@v2.9.0
-      with:
-        context: .
-        push: true
-        build-args: |
-          POSTGRES_VERSION=9.6
-          POSTGIS_VERSION=3
-        tags: esgn/pgtuned:9.6-3
-
-    - name: Build docker image with postgresql 9.6 and postgis 2.5
-      uses: docker/build-push-action@v2.9.0
-      with:
-        context: .
-        push: true
-        build-args: |
-          POSTGRES_VERSION=9.6
-          POSTGIS_VERSION=2.5
-        tags: esgn/pgtuned:9.6-2.5
-
-    - name: Build docker image with postgresql 9.6 and postgis 2.4
-      uses: docker/build-push-action@v2.9.0
-      with:
-        context: .
-        push: true
-        build-args: |
-          POSTGRES_VERSION=9.6
-          POSTGIS_VERSION=2.4
-        tags: esgn/pgtuned:9.6-2.4
-
-    - name: Build docker image with postgresql 9.6 and postgis 2.3
-      uses: docker/build-push-action@v2.9.0
-      with:
-        context: .
-        push: true
-        build-args: |
-          POSTGRES_VERSION=9.6
-          POSTGIS_VERSION=2.3
-        tags: esgn/pgtuned:9.6-2.3
-
-    - name: Build docker image with postgresql 9.6 but without postgis
-      uses: docker/build-push-action@v2.9.0
-      with:
-        context: .
-        push: true
-        build-args: |
-          POSTGRES_VERSION=9.6
-        tags: esgn/pgtuned:9.6
-
-
-
-    - name: Build docker image with postgresql 9.5 and postgis 3
-      uses: docker/build-push-action@v2.9.0
-      with:
-        context: .
-        push: true
-        build-args: |
-          POSTGRES_VERSION=9.5
-          POSTGIS_VERSION=3
-        tags: esgn/pgtuned:9.5-3
-
-    - name: Build docker image with postgresql 9.5 and postgis 2.5
-      uses: docker/build-push-action@v2.9.0
-      with:
-        context: .
-        push: true
-        build-args: |
-          POSTGRES_VERSION=9.5
-          POSTGIS_VERSION=2.5
-        tags: esgn/pgtuned:9.5-2.5
-
-    - name: Build docker image with postgresql 9.5 and postgis 2.4
-      uses: docker/build-push-action@v2.9.0
-      with:
-        context: .
-        push: true
-        build-args: |
-          POSTGRES_VERSION=9.5
-          POSTGIS_VERSION=2.4
-        tags: esgn/pgtuned:9.5-2.4
-
-    - name: Build docker image with postgresql 9.5 and postgis 2.3
-      uses: docker/build-push-action@v2.9.0
-      with:
-        context: .
-        push: true
-        build-args: |
-          POSTGRES_VERSION=9.5
-          POSTGIS_VERSION=2.3
-        tags: esgn/pgtuned:9.5-2.3
-
-    - name: Build docker image with postgresql 9.5 but without postgis
-      uses: docker/build-push-action@v2.9.0
-      with:
-        context: .
-        push: true
-        build-args: |
-          POSTGRES_VERSION=9.5
-        tags: esgn/pgtuned:9.5
-
-
+      - name: Build docker image
+        uses: docker/build-push-action@v2.9.0
+        with:
+          context: .
+          push: true
+          build-args: |
+            POSTGRES_VERSION=${{ matrix.postgres_version }}
+            POSTGIS_VERSION=${{ matrix.postgis_version }}
+          tags: ${{ matrix.tags }}
