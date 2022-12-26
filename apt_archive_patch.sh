@@ -1,16 +1,12 @@
 #!/usr/bin/env bash
 
-cd /etc/apt/sources.list.d
+codename=$(source /etc/os-release && echo -n $VERSION_CODENAME)
 
-mv pgdg.list pgdg.list.backup
-apt-get -qq update
-apt-get install bc -y
-
-# Aonther possibility here would be to test for debian version
-if [[ $PG_TAG =~ ^[0-9]+([.][0-9]+)?$ ]] && [[ $(echo "$PG_TAG < 12" | bc) -eq 1 ]]
+if [ "$codename" = "stretch" ]
 then
+  mv pgdg.list pgdg.list.backup
+  apt-get -qq update
   apt-get install apt-transport-https -y
   sed -i "s/http\:\/\/apt\.postgres/https\:\/\/apt-archive\.postgres/" pgdg.list.backup
+  mv pgdg.list.backup pgdg.list
 fi
-
-mv pgdg.list.backup pgdg.list

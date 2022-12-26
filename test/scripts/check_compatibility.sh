@@ -11,8 +11,8 @@ do
   echo "Examining postgres:$v"
   echo "######################"
   docker run -d -e POSTGRES_PASSWORD=secret --name pg$v postgres:$v >/dev/null 2>&1
-  # Use apt-archive.postgres.org for old Debian stretch images
-  if [ $(echo "$v < 12"| bc) -ne 0 ]
+  codename=$(docker exec -ti pg$v bash -c "source /etc/os-release && echo -n \$VERSION_CODENAME")
+  if [ "$codename" = "stretch" ]
   then
     echo "applying apt-archive.postgres.org patch"
     c="cd /etc/apt/sources.list.d/ && mv pgdg.list pgdg.list.backup"
@@ -28,7 +28,7 @@ do
   fi
   c="apt update >/dev/null 2>&1 && apt-cache search $v-postgis | grep -Po '(?<=postgresql-$v-postgis-)([0-9\.]*)' | uniq | xargs "
   versions=$(docker exec -ti pg$v bash -c "$c")
-  distrib=$(docker exec -ti pg$v bash -c 'cat /etc/os-release' | grep -Po '(?<=PRETTY_NAME=")(.*)(?=")')
+  distrib=$(docker exec -ti pg$v bash -c "source /etc/os-release && echo -n \$PRETTY_NAME")
   echo "Available PostGIS versions : "$versions
   echo "Running on "$distrib
   docker rm -f pg$v >/dev/null 2>&1
