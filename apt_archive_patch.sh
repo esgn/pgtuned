@@ -8,6 +8,7 @@ codename=$(source /etc/os-release && echo -n $VERSION_CODENAME)
 
 if [ "$codename" = "stretch" ]
 then
+  cd /etc/apt/sources.list.d/
   mv pgdg.list pgdg.list.backup
   apt-get -qq update
   apt-get install apt-transport-https -y
