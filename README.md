@@ -76,10 +76,10 @@ docker build --no-cache --build-arg POSTGRES_VERSION=13 . -t pgtuned:13
 docker build --no-cache --build-arg POSTGRES_VERSION=11 --build-arg POSTGIS_VERSION=2.5 . -t pgtuned:11-2.5
 ```
 
-:point_right: The helper script `test/scripts/check-compatibility.sh` runs the main versions of the official Docker PostgreSQL image and checks available PostGIS versions for each. This could be used as a guide to select the correct version of PostGIS for each PostgreSQL image version. Note that a patch is applied for `postgres` images older than 12 still running on Debian Stretch.
+:point_right: The helper script `test/scripts/check_compatibility.sh` runs the main versions of the official Docker PostgreSQL image and checks available PostGIS versions for each. This could be used as a guide to select the correct version of PostGIS for each PostgreSQL image version. Note that a patch is applied for `postgres` images older than 12 still running on Debian Stretch.
 
 <details> 
-<summary>View ouput of <code>check-compatibility.sh</code></summary>
+<summary>View ouput of <code>check_compatibility.sh</code></summary>
 <pre>
 <code>
 Examining postgres:15
@@ -108,17 +108,32 @@ applying apt-archive.postgres.org patch
 Available PostGIS versions : 2.5 3
 Running on Debian GNU/Linux 9 (stretch)
 <br/>
+Examining postgres:11-bullseye
+######################
+Available PostGIS versions : 3
+Running on Debian GNU/Linux 11 (bullseye)
+<br/>
 Examining postgres:10
 ######################
 applying apt-archive.postgres.org patch
 Available PostGIS versions : 2.4 2.5 3
 Running on Debian GNU/Linux 9 (stretch)
 <br/>
+Examining postgres:10-bullseye
+######################
+Available PostGIS versions : 3
+Running on Debian GNU/Linux 11 (bullseye)
+<br/>
 Examining postgres:9.6
 ######################
 applying apt-archive.postgres.org patch
 Available PostGIS versions : 2.3 2.4 2.5 3
 Running on Debian GNU/Linux 9 (stretch)
+<br/>
+Examining postgres:9.6-bullseye
+######################
+Available PostGIS versions : 3
+Running on Debian GNU/Linux 11 (bullseye)
 <br/>
 Examining postgres:9.5
 ######################
