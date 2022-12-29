@@ -1,4 +1,4 @@
-# DB Version: 10
+# DB Version: 14
 # OS Type: linux
 # DB Type: web
 # Total Memory (RAM): 8 GB
@@ -19,5 +19,6 @@ work_mem = 524kB
 min_wal_size = 1GB
 max_wal_size = 4GB
 max_worker_processes = 8
-max_parallel_workers_per_gather = 4
 max_parallel_workers = 8
+max_parallel_maintenance_workers = 4
+max_parallel_workers_per_gather = 4

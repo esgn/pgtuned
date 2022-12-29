@@ -13,8 +13,8 @@ It produces a postgresql.conf file based on supplied parameters.
 
   -h                  display this help and exit
   -v PG_VERSION       (optional) PostgreSQL version
-                      accepted values: 9.5, 9.6, 10, 11, 12, 13, 14
-                      default value: 14
+                      accepted values: 9.5, 9.6, 10, 11, 12, 13, 14, 15
+                      default value: 15
   -t DB_TYPE          (optional) For what type of application is PostgreSQL used
                       accepted values: web, oltp, dw, desktop, mixed
                       default value: web
@@ -51,7 +51,7 @@ _error() {
 
 get_total_ram () {
   local total_ram=$(cat /proc/meminfo | grep -i 'memtotal' | grep -o '[[:digit:]]*')
-  if [[ ! $total_ram ]]
+  if [[ -z $total_ram ]] || [[ "$total_ram" -eq "0" ]]
   then
     _error "cannot detect total memory size, terminating script. Please supply -m TOTAL_MEM."
   fi
@@ -60,15 +60,18 @@ get_total_ram () {
 
 get_cpu_count () {
   local cpu_count=$(nproc --all)
-  if [[ ! $cpu_count ]]
+  if [[ -z $cpu_count ]] || [[ "$cpu_count" -eq "0" ]]
   then
     _error "cannot detect cpu count, terminating script. Please supply -u CPU_COUNT."
   fi
   echo $cpu_count
 }
 
-get_disk_type () {
-  local disk_type_clue=$(cat /sys/block/sda/queue/rotational 2>/dev/null)
+get_disk_type () {  
+  # PGDATA should always be defined in base postgres image
+  # findmnt should also be installed by default
+  local disk_name=$(basename $(findmnt -v -n -o SOURCE --target $PGDATA 2>/dev/null) 2>/dev/null)
+  local disk_type_clue=$(cat /sys/block/$disk_name/queue/rotational 2>/dev/null)
   case "$disk_type_clue" in
     "0")
       disk_type="ssd"
@@ -93,7 +96,7 @@ set_db_default_values() {
       max_worker_processes=8
       max_parallel_workers_per_gather=0
       ;;
-    "10" | "11" | "12" | "13" | "14")
+    "10" | "11" | "12" | "13" | "14" | "15")
       max_worker_processes=8
       max_parallel_workers_per_gather=2
       max_parallel_workers=8
@@ -413,7 +416,7 @@ cpu_num=$(get_cpu_count) || exit $?
 storage_type=$(get_disk_type)
 conn_nb=0
 db_type="web"
-db_version=14
+db_version=15
 
 while getopts "hv:t:m:u:c:s:" opt; do
   case $opt in
@@ -429,7 +432,8 @@ while getopts "hv:t:m:u:c:s:" opt; do
       [ $v != "11" ] && \
       [ $v != "12" ] && \
       [ $v != "13" ] && \
-      [ $v != "14" ]
+      [ $v != "14" ] && \
+      [ $v != "15" ]
       then
         _input_error "$v is not a valid PostgreSQL version number"
       fi
@@ -568,6 +572,5 @@ if [ ! -z ${checkpoint_segments+x}]
 then
   echo "checkpoint_segments = "$checkpoint_segments
 fi
-echo
 
 unset set_parallel_settings

@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
-test_files_dir="test_files/"
-pg_versions="14 13 12 11 10 9.6 9.5"
+# This scripts runs pgtune.sh and compare its results
+# to expected results (see /expected_results directory)
+
+test_files_dir="../expected_results/"
+pgtuned_script="../../pgtune.sh"
+pg_versions="15 14 13 12 11 10 9.6 9.5"
 db_types="web oltp dw desktop mixed"
 total_mem=8GB
 cpu_count=8
@@ -23,7 +27,7 @@ do
       echo "= stge_type: "$stge_type
       echo "====================================="
       output_file=$pg_version$db_type$total_mem$cpu_count$max_conn$stge_type".txt"
-      bash pgtune.sh -v $pg_version -t $db_type -m $total_mem -u $cpu_count -c $max_conn -s $stge_type > $output_file
+      bash $pgtuned_script -v $pg_version -t $db_type -m $total_mem -u $cpu_count -c $max_conn -s $stge_type > $output_file
       test_file=$pg_version"_linux_"$db_type"_"$total_mem"_"$cpu_count"_"$max_conn"_"$stge_type".txt"
       if [ ! -f "$test_files_dir$test_file" ]
       then
