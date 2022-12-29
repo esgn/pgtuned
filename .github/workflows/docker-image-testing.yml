@@ -1,0 +1,102 @@
+name: Build and push pgtuned images
+
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - postgres_version: 15
+            tags: esgn/pgtuned-testing:15, esgn/pgtuned-testing:latest
+          - postgres_version: 15
+            postgis_version: 3
+            tags: esgn/pgtuned-testing:15-3, esgn/pgtuned-testing:postgis-latest
+          - postgres_version: 14
+            tags: esgn/pgtuned-testing:14
+          - postgres_version: 14
+            postgis_version: 3
+            tags: esgn/pgtuned-testing:14-3
+          - postgres_version: 13
+            tags: esgn/pgtuned-testing:13
+          - postgres_version: 13
+            postgis_version: 3
+            tags: esgn/pgtuned-testing:13-3
+          - postgres_version: 12
+            tags: esgn/pgtuned-testing:12
+          - postgres_version: 12
+            postgis_version: 3
+            tags: esgn/pgtuned-testing:12-3
+          - postgres_version: 11-bullseye
+            tags: esgn/pgtuned-testing:11
+          - postgres_version: 11-bullseye
+            postgis_version: 3
+            tags: esgn/pgtuned-testing:11-3
+          - postgres_version: 11
+            postgis_version: 2.5
+            tags: esgn/pgtuned-testing:11-2.5
+          - postgres_version: 10-bullseye
+            tags: esgn/pgtuned-testing:10
+          - postgres_version: 10-bullseye
+            postgis_version: 3
+            tags: esgn/pgtuned-testing:10-3
+          - postgres_version: 10
+            postgis_version: 2.5
+            tags: esgn/pgtuned-testing:10-2.5
+          - postgres_version: 10
+            postgis_version: 2.4
+            tags: esgn/pgtuned-testing:10-2.4
+          - postgres_version: 9.6-bullseye
+            tags: esgn/pgtuned-testing:9.6
+          - postgres_version: 9.6-bullseye
+            postgis_version: 3
+            tags: esgn/pgtuned-testing:9.6-3
+          - postgres_version: 9.6
+            postgis_version: 2.5
+            tags: esgn/pgtuned-testing:9.6-2.5
+          - postgres_version: 9.6
+            postgis_version: 2.4
+            tags: esgn/pgtuned-testing:9.6-2.4
+          - postgres_version: 9.6
+            postgis_version: 2.3
+            tags: esgn/pgtuned-testing:9.6-2.3
+          - postgres_version: 9.5
+            tags: esgn/pgtuned-testing:9.5
+          - postgres_version: 9.5
+            postgis_version: 3
+            tags: esgn/pgtuned-testing:9.5-3
+          - postgres_version: 9.5
+            postgis_version: 2.5
+            tags: esgn/pgtuned-testing:9.5-2.5
+          - postgres_version: 9.5
+            postgis_version: 2.4
+            tags: esgn/pgtuned-testing:9.5-24
+          - postgres_version: 9.5
+            postgis_version: 2.3
+            tags: esgn/pgtuned-testing:9.5-2.3
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1.12.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build docker image
+        uses: docker/build-push-action@v2.9.0
+        with:
+          context: .
+          push: true
+          build-args: |
+            POSTGRES_VERSION=${{ matrix.postgres_version }}
+            POSTGIS_VERSION=${{ matrix.postgis_version }}
+          tags: ${{ matrix.tags }}

@@ -6,7 +6,7 @@ This project includes a bash script equivalent of [PGTune](https://github.com/le
 
 ## `pgtune.sh`
 
-This `pgtune.sh` script is a bash port of [PGTune](https://github.com/le0pard/pgtune).  
+This `pgtune.sh` script is a bash port of [PGTune](https://github.com/le0pard/pgtune) with additions for system resources detection.    
 All arguments have been rendered optional. The script will either use default value or try and automatically determine the parameter value.
 
 ```
@@ -52,7 +52,7 @@ When running the PGTuned image as a container, the `pgtuned.sh` script replaces 
 ### Building PGTuned image
 
 The build stage of the PGTuned image accepts **two optional build arguments** :
-* `POSTGRES_VERSION` corresponds to any tag available in the [official PostgreSQL Docker image](https://hub.docker.com/_/postgres) save the `alpine` tags (examples : 14, 13.6, 11.15-stretch, ...). If omitted the `14` tag will be used.
+* `POSTGRES_VERSION` corresponds to any tag available in the [official PostgreSQL Docker image](https://hub.docker.com/_/postgres) save the `alpine` tags (examples : 14, 13.6, 11.15-stretch, ...). If omitted the `15` tag will be used.
 * `POSTGIS_VERSION` corresponds to the version of [PostGIS](https://postgis.net/) that will be installed. The selected version of PostGIS must be available in the packages of the chosen PostgreSQL image. If omitted PostGIS will not be installed.  
 <br />
 

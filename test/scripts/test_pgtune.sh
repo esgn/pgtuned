@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This scripts runs pgtune.sh and compare its results
-# to exepected results (in /expected_results directory)
+# to expected results (see /expected_results directory)
 
 test_files_dir="../expected_results/"
 pgtuned_script="../../pgtune.sh"

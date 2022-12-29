@@ -5,7 +5,7 @@
 
 testing_image="esgn/pgtuned-testing"
 
-tags=$(curl "https://registry.hub.docker.com/v2/repositories/esgn/pgtuned-testing/tags?page_size=32" 2>/dev/null | jq -r '.results | .[] | .name')
+tags=$(curl "https://registry.hub.docker.com/v2/repositories/$testing_image/tags?page_size=32" 2>/dev/null | jq -r '.results | .[] | .name')
 for tag in $tags
 do
   image_name=$testing_image":"$tag
