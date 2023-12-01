@@ -177,7 +177,7 @@ set_maintenance_work_mem() {
   local mem_limit=$(( 2 * $GB / $KB ))
   if [ "$maintenance_work_mem" -gt "$mem_limit" ]
   then
-    maintenance_work_mem = $mem_limit
+    maintenance_work_mem=$mem_limit
   fi
 }
 
