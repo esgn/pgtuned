@@ -6,34 +6,34 @@ declare -A outoftune
 
 cmd_opts=""
 
-if [ ! -z $PG_VERSION ]
+if [ -n "$PG_VERSION" ]
 then
   cmd_opts+=" -v "$PG_VERSION
 else
   cmd_opts+=" -v "$PG_MAJOR
 fi
 
-if [ ! -z $DB_TYPE ]
+if [ -n "$DB_TYPE" ]
 then
   cmd_opts+=" -t "$DB_TYPE
 fi
 
-if [ ! -z $TOTAL_MEM ]
+if [ -n "$TOTAL_MEM" ]
 then
   cmd_opts+=" -m "$TOTAL_MEM
 fi
 
-if [ ! -z $CPU_COUNT ]
+if [ -n "$CPU_COUNT" ]
 then
   cmd_opts+=" -u "$CPU_COUNT
 fi
 
-if [ ! -z $MAX_CONN ]
+if [ -n "$MAX_CONN" ]
 then
   cmd_opts+=" -c "$MAX_CONN
 fi
 
-if [ ! -z $STGE_TYPE ]
+if [ -n "$STGE_TYPE" ]
 then
   cmd_opts+=" -s "$STGE_TYPE
 fi
@@ -65,12 +65,10 @@ for key in "${!outoftune[@]}"
 do
   if [ ! "${tuned[$key]}" ]; then
     if [ "$comment_line" -eq 0 ]; then
-      echo >> tuned.conf 
-      echo "# Configuration parameters harvested from original docker postgres image postgresql.conf" >> tuned.conf
-      echo >> tuned.conf
+      { echo; echo "# Configuration parameters harvested from original docker postgres image postgresql.conf"; echo; } >> tuned.conf
       comment_line=1
     fi
-    echo $key" = "${outoftune[$key]} >> tuned.conf
+    echo "$key = ${outoftune[$key]}" >> tuned.conf
   fi
 done
 
