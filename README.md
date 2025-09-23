@@ -4,21 +4,23 @@ PGTuned is a first attempt at building Docker PostgreSQL/PostGIS images which in
 
 This project includes a bash script equivalent of [PGTune](https://github.com/le0pard/pgtune).
 
-## `pgtune.sh`
+## PGTune bash port
+
+### `pgtune.sh`
 
 This `pgtune.sh` script is a bash port of [PGTune](https://github.com/le0pard/pgtune) with additions for system resources detection.    
 All arguments have been rendered optional. The script will either use default value or try and automatically determine the parameter value.
 
 ```
-Usage: pgtune.sh [-h] [-v PG_VERSION] [-t DB_TYPE] [-m TOTAL_MEM] [-u CPU_COUNT] [-c MAX_CONN] [-s STGE_TYPE]
+Usage: ${0##*/} [-h] [-v PG_VERSION] [-t DB_TYPE] [-m TOTAL_MEM] [-u CPU_COUNT] [-c MAX_CONN] [-s STGE_TYPE]
 
 This script is a bash port of PGTune (https://pgtune.leopard.in.ua).
 It produces a postgresql.conf file based on supplied parameters.
 
   -h                  display this help and exit
   -v PG_VERSION       (optional) PostgreSQL version
-                      accepted values: 9.5, 9.6, 10, 11, 12, 13, 14, 15
-                      default value: 15
+                      accepted values: 9.5, 9.6, 10, 11, 12, 13, 14, 15, 16, 17
+                      default value: 17
   -t DB_TYPE          (optional) For what type of application is PostgreSQL used
                       accepted values: web, oltp, dw, desktop, mixed
                       default value: web
@@ -31,17 +33,17 @@ It produces a postgresql.conf file based on supplied parameters.
                       default value: this script will try to determine the CPUs count and exit in case of failure
   -c MAX_CONN         (optional) Maximum number of PostgreSQL client connections
                       accepted values: integer between 20 and 9999
-                      default value: preset corresponding to db_type
+                      default value: preset corresponding to DB_TYPE
   -s STGE_TYPE        (optional) Type of data storage device used with PostgreSQL
                       accepted values: hdd, ssd, san
-                      default value: this script will try to determine the storage type (san not supported) and use hdd
-                      value in case of failure.
+                      default value: this script will try to determine the storage type (san not supported) 
+                      and use hdd value in case of failure.
 ```
 
-## `test.sh`
+### `test_pgtune.sh`
 
-The `test.sh` compares a selected number of `pgtune.sh` results with pre-generated `postgresql.conf` available in `test_files/`.  
-<br />
+The `test_pgtune.sh` script available in `test/scripts` compares a selected number of `pgtune.sh` results with pre-generated `postgresql.conf` available in `test/expected_results`.  
+
 
 ## Building and running PGTuned Docker image
 
@@ -52,13 +54,13 @@ When running the PGTuned image as a container, the `pgtuned.sh` script replaces 
 ### Building PGTuned image
 
 The build stage of the PGTuned image accepts **two optional build arguments** :
-* `POSTGRES_VERSION` corresponds to any tag available in the [official PostgreSQL Docker image](https://hub.docker.com/_/postgres) save the `alpine` tags (examples : 14, 13.6, 11.15-stretch, ...). If omitted the `15` tag will be used.
+* `POSTGRES_VERSION` corresponds to any tag available in the [official PostgreSQL Docker image](https://hub.docker.com/_/postgres) save the `alpine` tags (examples : 14, 13.6, 11.15-stretch, ...). If omitted the `17` tag will be used.
 * `POSTGIS_VERSION` corresponds to the version of [PostGIS](https://postgis.net/) that will be installed. The selected version of PostGIS must be available in the packages of the chosen PostgreSQL image. If omitted PostGIS will not be installed.  
 <br />
 
 Below are command line examples to build different version of the PGTuned image :
 
-* Build the `pgtuned` image using `postgres:15` image **without PostGIS** :
+* Build the `pgtuned` image using `postgres:17` image **without PostGIS** :
 
 ```
 docker build --no-cache . -t pgtuned
@@ -82,25 +84,35 @@ docker build --no-cache --build-arg POSTGRES_VERSION=11 --build-arg POSTGIS_VERS
 <summary>View ouput of <code>check_compatibility.sh</code></summary>
 <pre>
 <code>
+Examining postgres:17
+######################
+Available PostGIS versions : 3
+Running on Debian GNU/Linux 12 (bookworm)
+<br/>
+Examining postgres:16
+######################
+Available PostGIS versions : 3
+Running on Debian GNU/Linux 12 (bookworm)
+<br/>
 Examining postgres:15
 ######################
 Available PostGIS versions : 3
-Running on Debian GNU/Linux 11 (bullseye)
+Running on Debian GNU/Linux 12 (bookworm)
 <br/>
 Examining postgres:14
 ######################
 Available PostGIS versions : 3
-Running on Debian GNU/Linux 11 (bullseye)
+Running on Debian GNU/Linux 12 (bookworm)
 <br/>
 Examining postgres:13
 ######################
 Available PostGIS versions : 3
-Running on Debian GNU/Linux 11 (bullseye)
+Running on Debian GNU/Linux 12 (bookworm)
 <br/>
 Examining postgres:12
 ######################
 Available PostGIS versions : 3
-Running on Debian GNU/Linux 11 (bullseye)
+Running on Debian GNU/Linux 12 (bookworm)
 <br/>
 Examining postgres:11
 ######################

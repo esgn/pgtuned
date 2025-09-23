@@ -1,1 +1,3 @@
 *.txt
+!test/expected_results/*.txt
+delete_this/
