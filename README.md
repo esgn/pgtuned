@@ -211,8 +211,8 @@ checkpoint_completion_target = 0.9
 ### Using PGTuned images directly from Docker hub
 
 This project builds a number of versions of the PGTuned image and deploy them to [Docker Hub](https://hub.docker.com/r/esgn/pgtuned) using the following tags :
-* `latest` corresponds to PostgreSQL 15
-* `postgis-latest` corresponds to PostgreSQL 15 and PostGIS 3
+* `latest` corresponds to PostgreSQL 17
+* `postgis-latest` corresponds to PostgreSQL 17 and PostGIS 3
 * `POSTGRES_VERSION` corresponds to a specific PostgreSQL image version (e.g. 12) without PostGIS
 * `POSTGRES_VERSION-POSTGIS_VERSION` corresponds to a specific PostgreSQL image version including a specific PostGIS version (e.g. 12-3)
 
